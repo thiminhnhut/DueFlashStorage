@@ -19,7 +19,7 @@ byte* DueFlashStorage::readAddress(uint32_t address) {
 
 boolean DueFlashStorage::write(uint32_t address, byte value) {
   uint32_t retCode;
-  uint32_t byteLength = 1;  
+  uint32_t byteLength = 1;
   byte *data;
 
   retCode = flash_unlock((uint32_t)FLASH_START+address, (uint32_t)FLASH_START+address + byteLength - 1, 0, 0);
@@ -90,7 +90,7 @@ boolean DueFlashStorage::write(uint32_t address, byte *data, uint32_t dataLength
 
 boolean DueFlashStorage::write_unlocked(uint32_t address, byte value) {
   uint32_t retCode;
-  uint32_t byteLength = 1;  
+  uint32_t byteLength = 1;
   byte *data;
 
   // write data
@@ -134,3 +134,42 @@ boolean DueFlashStorage::write_unlocked(uint32_t address, byte *data, uint32_t d
   return true;
 }
 
+DueFlashStorage::MyString DueFlashStorage::readString(uint32_t address) {
+  DueFlashStorage::MyString myString;
+  myString.size = read(address);
+  myString.data = "";
+
+  for (unsigned int i = 1; i <= myString.size; i++) {
+    myString.data += char(read(address + i));
+  }
+
+  return myString;
+}
+
+bool DueFlashStorage::writeString(uint32_t address, String data) {
+  if ((uint32_t)FLASH_START+address < IFLASH1_ADDR) {
+    _FLASH_DEBUG("Flash write address too low\n");
+    return false;
+  }
+
+  if ((uint32_t)FLASH_START+address >= (IFLASH1_ADDR + IFLASH1_SIZE)) {
+    _FLASH_DEBUG("Flash write address too high\n");
+    return false;
+  }
+
+  bool status = write(address, data.length());
+  if (!status) {
+    _FLASH_DEBUG("Flash write failed\n");
+    return false;
+  }
+
+  for (unsigned int i = 1; i <= data.length(); i++) {
+    bool status = write(address + i, (char) data[i - 1]);
+    if (!status) {
+      _FLASH_DEBUG("Flash write failed\n");
+      return false;
+    }
+  }
+
+  return true;
+}

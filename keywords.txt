@@ -16,3 +16,6 @@ DueFlashStorage	KEYWORD1	DueFlashStorage
 read	KEYWORD2
 readAddress	KEYWORD2
 write	KEYWORD2
+readString KEYWORD2
+writeString KEYWORD2
+MyString KEYWORD2
