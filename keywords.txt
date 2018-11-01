@@ -7,6 +7,7 @@
 #######################################
 
 DueFlashStorage	KEYWORD1
+StringArraysFlashStorage KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -19,3 +20,10 @@ write	KEYWORD2
 readString KEYWORD2
 writeString KEYWORD2
 MyString KEYWORD2
+
+# StringArraysFlashStorage Class
+init KEYWORD2
+writeString KEYWORD2
+readString KEYWORD2
+getCount KEYWORD2
+ErrorFlashStorage KEYWORD2
